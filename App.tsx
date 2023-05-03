@@ -149,7 +149,7 @@ export default function App() {
 
   useEffect(() => {
     // App launched, remove the badge count
-    notifee.setBadgeCount(0).then(() => console.log('Badge count removed'));
+    notifee.setBadgeCount(0).then(() => console.log('Badge count removed on Launch!'));
   }, []);
 
   return (
@@ -166,15 +166,15 @@ export default function App() {
       </View>
 
       <View style={styles.button} >
-        <Button color={'red'} title='Cancel Notification' onPress={cancelNotification}/>
-      </View>
-
-      <View style={styles.button} >
         <Button color={'purple'} title='Schedule Notification' onPress={scheduledNotification}/>
       </View>
 
       <View style={styles.button} >
         <Button color={'orange'} title='List Notification' onPress={listScheduledNotifications}/>
+      </View>
+
+      <View style={styles.button} >
+        <Button color={'red'} title='Cancel Notification' onPress={cancelNotification}/>
       </View>
     </View>
   );
