@@ -105,7 +105,8 @@ export default function App() {
             break;
   
           case EventType.PRESS:
-            console.log('IOS: User took action pressed notification', detail.pressAction);
+            console.log('IOS foreground: User took action pressed notification', detail.pressAction);
+            notifee.setBadgeCount(0).then(() => console.log('Badge count removed!'));
             break;
         
           default:
@@ -118,7 +119,8 @@ export default function App() {
             break;
   
           case EventType.PRESS:
-            console.log('ANDROID: User took action pressed notification', detail.notification);
+            console.log('ANDROID foreground: User took action pressed notification', detail.notification);
+            notifee.setBadgeCount(0).then(() => console.log('Badge count removed!'));
             break;
         
           default:
@@ -130,11 +132,17 @@ export default function App() {
 
   useEffect(() => {
     return notifee.onBackgroundEvent( async ({ type, detail }) => {
-
-      if (type === EventType.PRESS) {
-        console.log('User pressed notification', detail.pressAction);
-        notifee.setBadgeCount(0).then(() => console.log('Badge count removed!'));
-      };
+      if (Platform.OS === 'ios') {
+        if (type === EventType.PRESS) {
+          notifee.setBadgeCount(0).then(() => console.log('Badge count removed!'));
+          console.log('IOS background: User pressed notification', detail.pressAction);
+        };
+      } else {
+        if (type === EventType.PRESS) {
+          console.log('ANDROID background: User pressed notification', detail.notification);
+          notifee.setBadgeCount(0).then(() => console.log('Badge count removed!'));
+        };
+      }
 
     });
   }, []);
@@ -146,27 +154,27 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <Text>Notificações Locais</Text>
+      <Text>Local Notifications</Text>
       <StatusBar style="auto" />
 
       <View style={styles.button} >
-        <Button title='Disparar Notificação' onPress={displayNotification}/>
+        <Button color={''} title='Send Notification' onPress={displayNotification}/>
       </View>
 
       <View style={styles.button} >
-        <Button title='Atualizar Notificação' onPress={updateNotification}/>
+        <Button color={'green'} title='Update Notification' onPress={updateNotification}/>
       </View>
 
       <View style={styles.button} >
-        <Button title='Cancelar Notificação' onPress={cancelNotification}/>
+        <Button color={'red'} title='Cancel Notification' onPress={cancelNotification}/>
       </View>
 
       <View style={styles.button} >
-        <Button title='Agendar Notificação' onPress={scheduledNotification}/>
+        <Button color={'purple'} title='Schedule Notification' onPress={scheduledNotification}/>
       </View>
 
       <View style={styles.button} >
-        <Button title='Listar Notificações' onPress={listScheduledNotifications}/>
+        <Button color={'orange'} title='List Notification' onPress={listScheduledNotifications}/>
       </View>
     </View>
   );
